@@ -79,6 +79,10 @@ SOURCE=.\ListCtrlWithTooltips.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\LockWindowUpdate.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\qsortint.cpp
 # End Source File
 # Begin Source File
@@ -95,6 +99,10 @@ SOURCE=.\SplitSelListCtrl.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\StatLink.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\StdAfx.cpp
 # End Source File
 # Begin Source File
@@ -104,6 +112,10 @@ SOURCE=.\ThreadObject.cpp
 # Begin Source File
 
 SOURCE=.\UTF8codec.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\WaitMessageDlg.cpp
 # End Source File
 # Begin Source File
 
@@ -159,6 +171,10 @@ SOURCE=.\ListCtrlWithTooltips.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\LockWindowUpdate.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\MemDC.h
 # End Source File
 # Begin Source File
@@ -187,6 +203,10 @@ SOURCE=.\SQLTask.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\StatLink.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\StdAfx.h
 # End Source File
 # Begin Source File
@@ -207,6 +227,10 @@ SOURCE=.\UTF8iterator.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\WaitMessageDlg.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\XMLite.h
 # End Source File
 # Begin Source File
@@ -217,6 +241,10 @@ SOURCE=.\XMLWriter.h
 # Begin Group "Resource Files"
 
 # PROP Default_Filter "rc,bmp,ico,cur"
+# Begin Source File
+
+SOURCE=.\res\aero_link.cur
+# End Source File
 # Begin Source File
 
 SOURCE=.\res\aero_move.cur

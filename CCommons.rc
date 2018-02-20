@@ -75,6 +75,13 @@ BEGIN
     LTEXT           "Espere",IDC_STATIC,7,15,23,8
 END
 
+IDD_WAITMESSAGE_DLG DIALOG DISCARDABLE  0, 0, 140, 34
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "Text",IDD_WAITMESSAGE_TEXT,7,13,15,8
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -91,6 +98,14 @@ BEGIN
         TOPMARGIN, 7
         BOTTOMMARGIN, 45
     END
+
+    IDD_WAITMESSAGE_DLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 133
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 27
+    END
 END
 #endif    // APSTUDIO_INVOKED
 
@@ -101,6 +116,18 @@ END
 //
 
 IDC_MOVE_CURSOR         CURSOR  DISCARDABLE     "res\\aero_move.cur"
+IDC_LINK_CURSOR         CURSOR  DISCARDABLE     "res\\aero_link.cur"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_WAIT                "Espere..."
+END
+
 #endif    // Spanish (Modern) resources
 /////////////////////////////////////////////////////////////////////////////
 

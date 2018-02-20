@@ -1,10 +1,24 @@
 #ifndef CCGLOBALS_H
 #define CCGLOBALS_H
 
+#include <math.h>
+#include <clocale>
+
+#include "UTF8Codec.h"
+
 #define ON_LOCK_MAINWINDOW_UPDATE		::SendMessage(AfxGetMainWnd()->m_hWnd, WM_SETREDRAW, FALSE, 0)
 #define ON_UNLOCK_MAINWINDOW_UPDATE		::SendMessage(AfxGetMainWnd()->m_hWnd, WM_SETREDRAW, TRUE, 0)
-#define	ON_BITMAP_BUTTON(uIDC, hbmp)	::SendMessage(GetDlgItem(uIDC)->m_hWnd, BM_SETIMAGE, (WPARAM)IMAGE_BITMAP, (LPARAM)hbmp)
-#define	ON_ICON_BUTTON(uIDC, hicon)		::SendMessage(GetDlgItem(uIDC)->m_hWnd, BM_SETIMAGE, (WPARAM)IMAGE_ICON, (LPARAM)hicon)
+#define	ON_BITMAP_BUTTON(hwnd, hbmp)	::SendMessage(hwnd, BM_SETIMAGE, (WPARAM)IMAGE_BITMAP, (LPARAM)hbmp)
+#define	ON_ICON_BUTTON(hwnd, hicon)		::SendMessage(hwnd, BM_SETIMAGE, (WPARAM)IMAGE_ICON, (LPARAM)hicon)
+
+extern "C" HINSTANCE GetCurrentModuleHandle();
+
+#define LOAD_LOCAL_STRING(str, idd)  {\
+	HINSTANCE defHInst = ::AfxGetResourceHandle(); \
+	::AfxSetResourceHandle(::GetCurrentModuleHandle()); \
+	str.LoadString(idd); \
+	::AfxSetResourceHandle(defHInst); \
+}
 
 #include "CCommons_dfdllh1.h"
 
@@ -47,9 +61,9 @@ namespace CCGlobals
 		return defAttr;
 	}
 
-	CString Trim(LPCTSTR i_str)
+	CString Trim(LPCTSTR i_string)
 	{
-		CString s(i_str);
+		CString s(i_string);
 		s.TrimRight();
 		s.TrimLeft();
 		return s;
@@ -57,7 +71,7 @@ namespace CCGlobals
 
 	BOOL IsStringNumeric(LPCTSTR i_string)
 	{
-		CString s(i_str);
+		CString s(i_string);
 		if(s.IsEmpty())
 			return FALSE;
 		for(int nIndex = 0; nIndex < s.GetLength(); nIndex++)
@@ -125,21 +139,22 @@ namespace CCGlobals
 		return result;
 	}
 
-	void SetBitmapOnButton(UINT i_uButtonID, UINT i_uBitmapID)
+	void SetBitmapOnButton(CBitmap& i_bmp, UINT i_uBitmapID, HWND i_buttonHwnd)
 	{
-		HBITMAP		hbmp = 0;
-		if(bmp.LoadBitmap(i_uBitmapID, FALSE, RGB(192, 192, 192)))
-			hbmp = HBITMAP(bmp);
-		ON_BITMAP_BUTTON(i_uButtonID, hbmp);
+		if(i_bmp.LoadBitmap(i_uBitmapID) == TRUE)
+		{
+			HBITMAP hbmp = HBITMAP(i_bmp);
+			ON_BITMAP_BUTTON(i_buttonHwnd, hbmp);
+		}	
 	}
 
-	void SetIconOnButton(UINT i_uButtonID, UINT i_uIconID)
+	void SetIconOnButton(UINT i_uIconID, HWND i_buttonHwnd)
 	{
-		CWinApp*		pApp  = AfxGetApp();
-		HINSTANCE		hinst = pApp->m_hInstance;
-		// HINSTANCE	hinst = ::GetCurrentModuleHandle();
+		CWinApp*	pApp  = AfxGetApp();
+		HINSTANCE	hinst = pApp->m_hInstance;
+//		HINSTANCE	hinst = ::GetCurrentModuleHandle();
 		HICON		hicon = (HICON)LoadImage(hinst, MAKEINTRESOURCE(i_uIconID), IMAGE_ICON, 16, 16, 0);
-		ON_ICON_BUTTON(i_uButtonID, hicon);
+		ON_ICON_BUTTON(i_buttonHwnd, hicon);
 	}
 
 	BOOL VerifyDLLVersion(LPCTSTR i_dllName, CTimeStamp& o_dllDate)
@@ -177,9 +192,19 @@ namespace CCGlobals
 		return FALSE;
 	}
 
+	bool HasUTF8Chars(string i_string)
+	{
+		for(size_t iIndex = 0; iIndex < i_string.size(); iIndex++)
+		{
+			if(i_string.at(iIndex) & 128)
+				return true;
+		}
+		return false;
+	}
+
     void print(WORD i_attr, const char* i_string, ...)
 	{
-		WORD defAttr = TC::SetConsoleTextAtribute(i_attr);
+		WORD defAttr = CCGlobals::SetConsoleTextAtribute(i_attr);
 		setlocale(LC_ALL, "");
 		if(HasUTF8Chars(i_string)) {
 			string strout(i_string);
@@ -229,48 +254,6 @@ namespace CCGlobals
 		wstring out(szBuffer);
 		va_end(paramList);
 		return out;
-	}
-
-    bool HasUTF8Chars(string i_string)
-	{
-		for(size_t iIndex = 0; iIndex < i_string.size(); iIndex++)
-		{
-			if(i_string.at(iIndex) & 128)
-				return true;
-		}
-		return false;
-	}
-
-	std::string WStringtoASCII(const std::wstring& i_input)
-	{
-		// This return single byte string (ASCII or ISO-8859-1) from a wide string.
-		// Be careful !!!!!
-		std::string s(i_input.begin(), i_input.end());
-		return s;
-	}
-
-	std::wstring ASCIItoWString(const std::string& i_input)
-	{
-		// This works if i_input is a single byte string (ASCII or ISO-8859-1).
-		// For multibyte string (UTF16) this conversion is not valid.
-		std::wstring ws(i_input.begin(), i_input.end());
-		return ws;
-	}
-
-	std::wstring UTF8toWString(const std::string& i_UTF8string)
-	{
-		// i_UTF8string is a UTF8 encoded estring
-		std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-		std::wstring ws = converter.from_bytes(i_UTF8string);
-		return ws;
-	}
-
-	std::string WUTF16toString(const std::wstring& i_wideUTF16string)
-	{
-		// i_wideUTF16string is a wide UTF16 encoded string
-		std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-		std::string s = converter.to_bytes(i_wideUTF16string);
-		return s;
 	}
 
 	std::string to_utf8(const wchar_t* buffer, int len)

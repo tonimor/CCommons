@@ -11,7 +11,7 @@
 Usage
 -----
 Derive your own class from CListCtrlWithTooltips.
-Implement GetTooltipString and use it as a member of your own wnd and :
+Implement GetTooltipString and use it as a member of your own wnd :
 
 void CListCtrlWithTooltipsDerived::GetTooltipString(LV_HITTESTINFO lvTestInf, int i_row, CString& o_strTooltip)
 {
