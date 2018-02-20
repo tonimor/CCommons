@@ -109,6 +109,10 @@ SOURCE=.\UTF8codec.cpp
 
 SOURCE=.\XMLite.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=.\XMLWriter.cpp
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
@@ -204,6 +208,10 @@ SOURCE=.\UTF8iterator.h
 # Begin Source File
 
 SOURCE=.\XMLite.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\XMLWriter.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"

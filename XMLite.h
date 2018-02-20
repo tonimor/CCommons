@@ -10,6 +10,26 @@
 #include <vector>
 #include <deque>
 
+
+/*****************************************************************************
+Sample of usage to load xml file given xmlString
+-------------------------------------------------
+XDoc xdoc;
+if(xdoc.Load(xmlString))
+{
+
+	CString attr1, attr3, attr3;
+	LPXNode node = xdoc.GetChild("NODE_TAG");
+	if(node != NULL)
+	{
+		attr1 = node->GetAttrValue("ATTR_TAG1");
+		attr1 = node->GetAttrValue("ATTR_TAG2");
+		attr1 = node->GetAttrValue("ATTR_TAG3");
+	}
+}
+
+******************************************************************************/
+
 struct _tagXMLAttr;
 typedef _tagXMLAttr XAttr, *LPXAttr;
 typedef std::vector<LPXAttr> XAttrs;
