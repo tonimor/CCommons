@@ -105,6 +105,10 @@ SOURCE=.\ThreadObject.cpp
 
 SOURCE=.\UTF8codec.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=.\XMLite.cpp
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
@@ -196,6 +200,10 @@ SOURCE=.\UTF8codec.h
 # Begin Source File
 
 SOURCE=.\UTF8iterator.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\XMLite.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
