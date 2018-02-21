@@ -6,10 +6,14 @@
 
 #include "UTF8Codec.h"
 
-#define ON_LOCK_MAINWINDOW_UPDATE		::SendMessage(AfxGetMainWnd()->m_hWnd, WM_SETREDRAW, FALSE, 0)
-#define ON_UNLOCK_MAINWINDOW_UPDATE		::SendMessage(AfxGetMainWnd()->m_hWnd, WM_SETREDRAW, TRUE, 0)
-#define	ON_BITMAP_BUTTON(hwnd, hbmp)	::SendMessage(hwnd, BM_SETIMAGE, (WPARAM)IMAGE_BITMAP, (LPARAM)hbmp)
-#define	ON_ICON_BUTTON(hwnd, hicon)		::SendMessage(hwnd, BM_SETIMAGE, (WPARAM)IMAGE_ICON, (LPARAM)hicon)
+#define ON_LOCK_MAINWINDOW_UPDATE			::SendMessage(AfxGetMainWnd()->m_hWnd, WM_SETREDRAW, FALSE, 0)
+#define ON_UNLOCK_MAINWINDOW_UPDATE			::SendMessage(AfxGetMainWnd()->m_hWnd, WM_SETREDRAW, TRUE, 0)
+#define	ON_BITMAP_BUTTON(hwnd, hbmp)		::SendMessage(hwnd, BM_SETIMAGE, (WPARAM)IMAGE_BITMAP, (LPARAM)hbmp)
+#define	ON_ICON_BUTTON(hwnd, hicon)			::SendMessage(hwnd, BM_SETIMAGE, (WPARAM)IMAGE_ICON, (LPARAM)hicon)
+#define ON_FULLROWSELECT_LISTCTRL(hwnd)		::SendMessage(hwnd, LVM_SETEXTENDEDLISTVIEWSTYLE, LVS_EX_FULLROWSELECT, LVS_EX_FULLROWSELECT);
+#define ON_HEADERDRAGDROP_LISTCTRL(hwnd)	::SendMessage(hwnd, LVM_SETEXTENDEDLISTVIEWSTYLE, LVS_EX_HEADERDRAGDROP, LVS_EX_HEADERDRAGDROP);
+#define ON_CHECKBOXES_LISTCTRL(hwnd)		::SendMessage(hwnd, LVM_SETEXTENDEDLISTVIEWSTYLE, LVS_EX_CHECKBOXES, LVS_EX_CHECKBOXES);
+
 
 extern "C" HINSTANCE GetCurrentModuleHandle();
 
@@ -155,6 +159,31 @@ namespace CCGlobals
 //		HINSTANCE	hinst = ::GetCurrentModuleHandle();
 		HICON		hicon = (HICON)LoadImage(hinst, MAKEINTRESOURCE(i_uIconID), IMAGE_ICON, 16, 16, 0);
 		ON_ICON_BUTTON(i_buttonHwnd, hicon);
+	}
+
+	CImageList* BuildImageList(HINSTANCE hInstance, int i_pixels, int i_numIcons, ...)
+	{
+		HINSTANCE hOldModule = AfxGetResourceHandle();
+		AfxSetResourceHandle(hInstance);
+		CImageList* pImageList =  new CImageList();
+		if(pImageList->Create(i_pixels, i_pixels, ILC_COLOR16 | ILC_MASK, 0, i_numIcons) == 0) {
+			AfxSetResourceHandle(hOldModule); 
+			delete pImageList;
+			return NULL;
+		}
+
+		va_list	paramList;
+		va_start(paramList, i_numIcons);
+		for(int i = 0; i < i_numIcons ; i++)
+		{ 
+			UINT idi = va_arg(paramList, UINT);
+			pImageList->Add(AfxGetApp()->LoadIcon(idi));
+		}
+		va_end(paramList);
+
+		AfxSetResourceHandle(hOldModule); 
+
+		return pImageList;
 	}
 
 	BOOL VerifyDLLVersion(LPCTSTR i_dllName, CTimeStamp& o_dllDate)
